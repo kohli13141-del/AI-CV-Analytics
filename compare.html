@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Resumes | AI CV Analytics</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: #09020f; 
+            color: white; 
+            min-height: 120vh; /* Scroll test karne ke liye */
+            overflow-x: hidden; 
+            position: relative;
+        }
+
+        /* Animated Background Layer */
+        #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: 1; }
+
+        /* Exact Contact Page Rich Glow with Opacity Optimization */
+        .bg-glow {
+            position: fixed; 
+            width: 700px; 
+            height: 700px;
+            background: radial-gradient(circle, rgba(168, 85, 247, 0.2) 0%, rgba(124, 58, 237, 0.1) 40%, transparent 70%);
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%);
+            filter: blur(100px); 
+            z-index: 2; 
+            pointer-events: none;
+            opacity: 0; /* Smooth initialization ke liye pehle hidden rahega */
+        }
+
+        /* =========================
+           NAVBAR (Contact Page Style)
+        ========================= */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 40px; width: 90%; position: fixed; top: 20px;
+            left: 50%; transform: translateX(-50%); border-radius: 50px;
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.1); z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Scrolled State */
+        nav.scrolled {
+            top: 0;
+            width: 100%;
+            border-radius: 0;
+            padding: 15px 60px;
+            background: rgba(9, 2, 15, 0.9) !important;
+            border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        nav h1 { font-size: 24px; font-weight: 700; }
+        nav h1 span { color: #a855f7; }
+        
+        nav ul { display: flex; gap: 10px; list-style: none; }
+        nav ul li { position: relative; padding: 8px 15px; }
+        
+        nav ul li a { 
+            color: #d4d4d8; 
+            text-decoration: none; 
+            font-size: 15px; 
+            font-weight: 500; 
+            transition: 0.3s; 
+        }
+        
+        nav ul li:hover a { color: #fff; }
+        
+        /* Premium Underline Animation */
+        nav ul li::after {
+            content: ""; position: absolute; width: 0%; height: 2px; bottom: 5px; 
+            left: 50%; transform: translateX(-50%); 
+            background: linear-gradient(90deg, #ff4d4d, #7c3aed);
+            transition: 0.3s ease-in-out; border-radius: 2px;
+        }
+        nav ul li:hover::after { width: 70%; }
+
+        /* =========================
+           CONTENT
+        ========================= */
+        .wrapper { position: relative; z-index: 10; padding: 150px 5% 50px; text-align: center; }
+
+        .comparison-grid { 
+            display: flex; align-items: center; justify-content: center; 
+            gap: 30px; flex-wrap: wrap; margin-top: 50px; 
+        }
+        
+        .compare-card {
+            flex: 1; min-width: 320px; max-width: 450px; padding: 40px;
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            backdrop-filter: blur(25px); 
+            border-radius: 28px;
+            transition: border 0.3s ease;
+        }
+
+        .vs-badge {
+            width: 70px; height: 70px; 
+            background: linear-gradient(45deg, #ff4d4d, #a855f7);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 22px; 
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.4);
+        }
+
+        .hero-btn {
+            padding: 15px 40px; border-radius: 12px; border: none;
+            background: linear-gradient(90deg, #9333ea, #4f46e5);
+            color: white; font-weight: 600; cursor: pointer; margin-top: 30px;
+            box-shadow: 0 5px 15px rgba(147, 51, 234, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .hero-btn:active { transform: scale(0.95); }
+
+        .score-display { 
+            font-size: 45px; font-weight: 800; margin-top: 20px; 
+            color: #a855f7; 
+        }
+
+        .winner-box {
+            margin-top: 50px; padding: 30px; border-radius: 20px;
+            background: rgba(34, 197, 94, 0.1); border: 1px solid #22c55e;
+            color: #22c55e; display: none; font-size: 26px; font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+    <div class="bg-glow"></div>
+
+    <nav id="navbar">
+        <h1 id="logo">AI CV <span>Analytics</span></h1>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="checkats.html">Check ATS</a></li>
+            <li><a href="compare.html">Comparison</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="wrapper">
+        <h2 id="main-title" style="font-size: 45px;">AI Resume <span>Comparison</span></h2>
+        
+        <div class="comparison-grid">
+            <div class="compare-card" id="cardA">
+                <h3>Candidate A</h3>
+                <input type="file" id="fileA" style="margin-top:20px; color:#888;">
+                <div id="resA" class="score-display" style="display:none;"><span id="numA">0</span>%</div>
+            </div>
+
+            <div class="vs-badge" id="vsBadge">VS</div>
+
+            <div class="compare-card" id="cardB">
+                <h3>Candidate B</h3>
+                <input type="file" id="fileB" style="margin-top:20px; color:#888;">
+                <div id="resB" class="score-display" style="display:none;"><span id="numB">0</span>%</div>
+            </div>
+        </div>
+
+        <button class="hero-btn" onclick="startBattle()">Start Battle</button>
+        <div id="winnerBox" class="winner-box"></div>
+    </div>
+
+<script>
+    window.onload = function() {
+        // Exact same configurations as Contact Page
+        if (typeof particlesJS !== "undefined") {
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#a855f7" },
+                    opacity: { value: 0.3 },
+                    size: { value: 3 },
+                    line_linked: { enable: true, distance: 150, color: "#7c3aed", opacity: 0.2, width: 1 },
+                    move: { enable: true, speed: 2 }
+                },
+                interactivity: { events: { onhover: { enable: true, mode: "grab" } } },
+                retina_detect: true
+            });
+        }
+        
+        // Entrance Animations
+        gsap.timeline().from("nav", { y: -100, opacity: 0, duration: 1 })
+          .from("#main-title", { y: 50, opacity: 0, duration: 1 }, "-=0.5")
+          .from(".compare-card", { scale: 0.8, opacity: 0, duration: 0.8, stagger: 0.2 }, "-=0.5")
+          .from("#vsBadge", { scale: 0, rotation: 360, duration: 0.8 }, "-=0.3");
+    };
+
+    window.addEventListener("scroll", () => {
+        const nav = document.getElementById("navbar");
+        if (window.scrollY > 50) nav.classList.add("scrolled");
+        else nav.classList.remove("scrolled");
+    });
+
+    // Smooth Cursor Glow (ATS Style) with smooth fade-in
+    document.addEventListener("mousemove", (e) => {
+        gsap.to(".bg-glow", { 
+            duration: 0.7, 
+            left: e.clientX, 
+            top: e.clientY, 
+            opacity: 1, // First move par dynamic transition ke sath visible hoga
+            ease: "power2.out" 
+        });
+    });
+
+    // ============================================
+    // REAL BACKEND COMPARISON LOGIC (FIXED & DYNAMIC)
+    // ============================================
+    async function startBattle() {
+        const f1 = document.getElementById('fileA').files[0];
+        const f2 = document.getElementById('fileB').files[0];
+        if(!f1 || !f2) { alert("Please upload both resumes in PDF format!"); return; }
+
+        document.getElementById('resA').style.display = 'block';
+        document.getElementById('resB').style.display = 'block';
+        const box = document.getElementById('winnerBox');
+        box.style.display = 'none';
+
+        document.getElementById('numA').innerText = "0";
+        document.getElementById('numB').innerText = "0";
+        gsap.from(".score-display", { scale: 1.5, opacity: 0, duration: 0.5, stagger: 0.2 });
+
+        const formData = new FormData();
+        formData.append("resumeA", f1);
+        formData.append("resumeB", f2);
+
+        // --- DYNAMIC URL LOGIC ---
+        const API_BASE = window.location.hostname === "127.0.0.1" || window.location.hostname === "localhost" 
+            ? "http://127.0.0.1:5000" 
+            : "https://ai-cv-analytics.onrender.com";
+
+        try {
+            const response = await fetch(`${API_BASE}/compare`, {
+                method: "POST",
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.error) {
+                alert("Error: " + data.error);
+                return;
+            }
+
+            const s1 = data.candidateA.ats_score;
+            const s2 = data.candidateB.ats_score;
+
+            animateNum('numA', s1);
+            animateNum('numB', s2);
+
+            setTimeout(() => {
+                box.style.display = 'block';
+                gsap.from(box, { y: 30, opacity: 0, duration: 0.8 });
+                
+                if(data.winner === "Candidate A") {
+                    box.innerHTML = `🏆 <b>Candidate A</b> Wins! (${data.candidateA.skills_count} skills detected)`;
+                    gsap.to("#cardA", { borderColor: "#22c55e", duration: 0.5 });
+                    gsap.to("#cardB", { borderColor: "rgba(168, 85, 247, 0.2)", duration: 0.5 });
+                } else if(data.winner === "Candidate B") {
+                    box.innerHTML = `🏆 <b>Candidate B</b> Wins! (${data.candidateB.skills_count} skills detected)`;
+                    gsap.to("#cardB", { borderColor: "#22c55e", duration: 0.5 });
+                    gsap.to("#cardA", { borderColor: "rgba(168, 85, 247, 0.2)", duration: 0.5 });
+                } else {
+                    box.innerHTML = "🤝 It's a Tie! Both are equally competitive.";
+                }
+            }, 2000);
+
+        } catch(e) {
+            console.error(e);
+            alert("Backend is offline! Check if Flask is running or Render app is waking up.");
+        }
+    }
+
+    function animateNum(id, target) {
+        let c = 0;
+        let i = setInterval(() => {
+            if(c >= target) { clearInterval(i); document.getElementById(id).innerText = target; }
+            else { c++; document.getElementById(id).innerText = c; }
+        }, 20);
+    }
+</script>
+</body>
+</html>

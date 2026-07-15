@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>AI CV Analytics</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="static/style.css">
+
+  <!-- Google Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+  <!-- ScrollTrigger -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <!-- Chart JS -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+  <!-- Particles Background -->
+  <div id="particles-js"></div>
+
+  <!-- Background Glow -->
+  <div class="bg-glow"></div>
+
+  <!-- Navbar -->
+<nav id="navbar">
+    <h1 id="logo">
+      AI CV <span>Analytics</span>
+    </h1>
+    <ul>
+  <li><a href="index.html" style="text-decoration: none; color: inherit;">Home</a></li>
+  <li><a href="checkats.html" style="text-decoration: none; color: inherit;">Check ATS</a></li>
+  <li><a href="compare.html" style="text-decoration: none; color: inherit;">Resume Comparison</a></li>
+  <li><a href="contact.html" style="text-decoration: none; color: inherit;">Contact</a></li>
+</ul>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+
+    <div class="hero-content">
+
+      <h2 class="title">
+        Future of AI Career Analytics
+      </h2>
+
+      <p>
+        Analyze resumes, predict careers, and explore salary insights with futuristic AI dashboards.
+      </p>
+
+      <button class="hero-btn">
+        Explore Dashboard
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- Dashboard Section -->
+  <section class="dashboard">
+
+    <h2 class="section-title">
+      AI Career Insights
+    </h2>
+
+    <div class="cards">
+
+      <div class="card">
+        <h3>12K+</h3>
+        <p>AI Jobs Analyzed</p>
+      </div>
+
+      <div class="card">
+        <h3>$145K</h3>
+        <p>Average AI Salary</p>
+      </div>
+
+      <div class="card">
+        <h3>Python</h3>
+        <p>Top Trending Skill</p>
+      </div>
+
+      <div class="card">
+        <h3>94%</h3>
+        <p>Prediction Accuracy</p>
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- Charts Section -->
+  <section class="charts">
+
+    <h2 class="section-title">
+      Analytics Overview
+    </h2>
+
+    <div class="chart-container">
+      <canvas id="chart"></canvas>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="salaryChart"></canvas>
+    </div>
+
+  </section>
+
+  <!-- Resume Upload -->
+ <section class="upload">
+    <h2 class="section-title">Upload Resume</h2>
+    <div class="upload-box">
+      <input type="file" id="resumeFile">
+      <button id="uploadBtn" onclick="uploadResume()">Analyze Resume</button>
+
+      <div id="scanner-container" style="display: none; margin-top: 30px;">
+        <div class="scanner-box">
+          <div class="laser"></div>
+        </div>
+        <p id="scan-text" class="scanning-text">Extracting text...</p>
+      </div>
+      
+    </div>
+    <div id="result"></div>
+  </section>
+
+  <!-- Power BI Section -->
+  <section class="powerbi">
+
+    <h2 class="section-title">
+      Power BI Dashboard
+    </h2>
+
+    <div class="power-box">
+
+      <iframe
+        src="YOUR_POWERBI_LINK"
+        frameborder="0"
+        allowfullscreen>
+      </iframe>
+
+    </div>
+
+  </section>
+
+  <!-- Script -->
+  <script src="static/script.js"></script>
+
+  <!-- Particles -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<div class="chatbot-container">
+    
+    <div class="chat-window" id="chatWindow" style="display: none;">
+      <div class="chat-header">
+        SheeAI
+        <button onclick="toggleChat()" style="background: none; border: none; color: white; cursor: pointer; font-size: 16px; padding: 0;">✖</button>
+      </div>
+      
+      <div class="chat-body" id="chatBody">
+      </div>
+      
+      <div class="chat-footer">
+        <input type="text" id="chatInput" placeholder="Type your question..." onkeypress="handleEnter(event)">
+        <button onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <button class="chat-btn" onclick="toggleChat()">💬 Ask AI</button>
+
+  </div>
+<footer class="main-footer">
+    <div class="footer-glow"></div>
+    <div class="footer-content">
+        <div class="footer-brand">
+            <h2 id="footer-logo">AI CV <span>Analytics</span></h2>
+            <p>Empowering the next generation of professionals with AI-driven career intelligence and real-time ATS optimization.</p>
+            <div class="social-links">
+                <a href="#">LinkedIn</a>
+                <a href="#">GitHub</a>
+                <a href="#">Twitter</a>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <h4>Platform</h4>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="checkats.html">ATS Scanner</a></li>
+                <li><a href="compare.html">Comparison</a></li>
+                <li><a href="analytics.html">Market Insights</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-links">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="#">AI Documentation</a></li>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 AI CV Analytics | Developed by <span>Mukul Roy</span></p>
+        <div class="status-indicator">
+            <span class="pulse-green"></span>
+            System Status: Optimal
+        </div>
+    </div>
+</footer>
+</body>
+</html>
