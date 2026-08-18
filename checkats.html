@@ -224,7 +224,7 @@
     async function startFullAnalysis() {
         const fileInput = document.getElementById('atsFile');
         const file = fileInput.files[0];
-        if(!file) { alert("Mukul, pehle ek PDF resume toh select karo!"); return; }
+        if(!file) { alert("First select your resume!"); return; }
 
         // UI Reset
         document.getElementById('resultArea').style.display = 'block';
