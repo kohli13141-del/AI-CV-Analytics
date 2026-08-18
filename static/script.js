@@ -230,7 +230,7 @@ const responses = {
     "kaise ho": "Main ek dum fit aur fine hoon! Aap bataiye?",
     "naam kya hai": "Mera naam AI Career Assistant hai.",
     "help": "Zaroor! Main aapka resume analyze kar sakta hoon aur career tips de sakta hoon.",
-    "kisne banaya": "Mujhe Mukul ne apne AI CV Analytics project ke liye banaya hai.",
+    "kisne banaya": "Mujhe Deepak ne apne AI CV Analytics project ke liye banaya hai.",
     "ats": "ATS ek software hai jo resumes ko filter karta hai. Isliye hamesha keywords use karein.",
     "pdf": "Hamesha PDF format use karein taaki resume ki design na bigde.",
     "bye": "Alvida! Apna khayal rakhein aur career par focus karein."
