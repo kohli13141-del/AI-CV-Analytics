@@ -64,3 +64,4 @@ def calculate_ats_score(text, found_skills):
         score += 10
         
     return min(score, 100) # Cap at 100
+    
