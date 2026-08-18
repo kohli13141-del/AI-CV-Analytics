@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
 
 from resume_parser import extract_text, extract_skills, calculate_ats_score
@@ -9,35 +9,72 @@ CORS(app)
 
 ALLOWED_EXTENSIONS = {'pdf'}
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Home Route
+def allowed_file(filename):
+    return (
+        '.' in filename
+        and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    )
+
+
+# ============================
+# FRONTEND ROUTES
+# ============================
+
+# Home page
 @app.route('/')
 def home():
-    return "AI CV Analytics Backend Running 🚀"
+    return render_template('index.html')
 
-# ----------------------------
-# 1. ATS & PARSER ROUTE
-# ----------------------------
+
+# Compare page
+@app.route('/compare')
+def compare():
+    return render_template('compare.html')
+
+
+# Contact page
+@app.route('/contact')
+def contact():
+    return render_template('contact.html')
+
+
+# ATS checker page
+@app.route('/checkats')
+def checkats():
+    return render_template('checkats.html')
+
+
+# ============================
+# 1. ATS & PARSER API ROUTE
+# ============================
+
 @app.route('/upload', methods=['POST'])
 def upload_resume():
     try:
         if 'resume' not in request.files:
-            return jsonify({"error": "No file uploaded"}), 400
+            return jsonify({
+                "error": "No file uploaded"
+            }), 400
 
         file = request.files['resume']
 
         if file.filename == '':
-            return jsonify({"error": "No selected file"}), 400
+            return jsonify({
+                "error": "No selected file"
+            }), 400
 
         if not allowed_file(file.filename):
-            return jsonify({"error": "Invalid format. Only PDF allowed!"}), 400
+            return jsonify({
+                "error": "Invalid format. Only PDF allowed!"
+            }), 400
 
         text = extract_text(file)
-        
+
         if text is None:
-            return jsonify({"error": "Could not read PDF. File might be corrupted."}), 500
+            return jsonify({
+                "error": "Could not read PDF. File might be corrupted."
+            }), 500
 
         skills = extract_skills(text)
         role = predict_role(skills)
@@ -50,29 +87,38 @@ def upload_resume():
         }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({
+            "error": str(e)
+        }), 500
 
 
-# ----------------------------
-# 2. COMPARISON BATTLE ROUTE
-# ----------------------------
+# ============================
+# 2. COMPARISON BATTLE API
+# ============================
+
 @app.route('/compare', methods=['POST'])
 def compare_resumes():
     try:
         if 'resumeA' not in request.files or 'resumeB' not in request.files:
-            return jsonify({"error": "Please upload both resumes"}), 400
+            return jsonify({
+                "error": "Please upload both resumes"
+            }), 400
 
         fileA = request.files['resumeA']
         fileB = request.files['resumeB']
 
         if not allowed_file(fileA.filename) or not allowed_file(fileB.filename):
-            return jsonify({"error": "Both files must be PDF format."}), 400
+            return jsonify({
+                "error": "Both files must be PDF format."
+            }), 400
 
         textA = extract_text(fileA)
         textB = extract_text(fileB)
 
         if textA is None or textB is None:
-            return jsonify({"error": "Error extracting text from one or both PDFs."}), 500
+            return jsonify({
+                "error": "Error extracting text from one or both PDFs."
+            }), 500
 
         skillsA = extract_skills(textA)
         skillsB = extract_skills(textB)
@@ -80,7 +126,7 @@ def compare_resumes():
         scoreA = calculate_ats_score(textA, skillsA)
         scoreB = calculate_ats_score(textB, skillsB)
 
-        # Decide Winner Backend Logic
+        # Decide winner
         if scoreA > scoreB:
             winner = "Candidate A"
         elif scoreB > scoreA:
@@ -89,15 +135,33 @@ def compare_resumes():
             winner = "Tie"
 
         return jsonify({
-            "candidateA": {"ats_score": scoreA, "skills_count": len(skillsA)},
-            "candidateB": {"ats_score": scoreB, "skills_count": len(skillsB)},
+            "candidateA": {
+                "ats_score": scoreA,
+                "skills_count": len(skillsA)
+            },
+            "candidateB": {
+                "ats_score": scoreB,
+                "skills_count": len(skillsB)
+            },
             "winner": winner
         }), 200
 
     except Exception as e:
-        return jsonify({"error": str(e)}), 500
+        return jsonify({
+            "error": str(e)
+        }), 500
+
+
+# ============================
+# START SERVER
+# ============================
 
 if __name__ == "__main__":
     import os
+
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+
+    app.run(
+        host='0.0.0.0',
+        port=port
+    )
